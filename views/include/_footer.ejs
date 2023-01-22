@@ -1,0 +1,54 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js"
+    integrity="sha512-tWHlutFnuG0C6nQRlpvrEhE4QpkG1nn2MOUMWmUeRePl4e3Aki0VB6W1v3oLjFtd0hVOtRQ9PHpSfN6u6/QXkQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $("#add_user").submit(function (event) {
+        alert('Data created Succesfully!')
+    })
+
+    $("#update_user").submit(function (event) {
+        event.preventDefault();
+
+        var unindexed_array = $(this).serializeArray();
+        var data = {}
+
+        $.map(unindexed_array, function (n, i) {
+            data[n['name']] = n['value']
+        })
+
+        console.log(data);
+
+        var request = {
+            "url": `http://localhost:3000/api/users/${data.id}`,
+            "method": "PUT",
+            "data": data
+        }
+
+        $.ajax(request).done(function (response) {
+            alert('Data updated Succesfully');
+        })
+    })
+
+    if (window.location.pathname == "/") {
+        $ondelete = $(".table tbody td a.delete");
+        $ondelete.click(function () {
+            var id = $(this).attr("data-id");
+
+            var request = {
+                "url": `http://localhost:3000/api/users/${id}`,
+                "method": "DELETE",
+            }
+
+            if (confirm("Do you really want yo delete this record?")) {
+                $.ajax(request).done(function (response) {
+                    alert('Data Deleted Succesfully');
+                    location.reload();
+                })
+            }
+
+        })
+    }
+</script>
+</body>
+
+</html>

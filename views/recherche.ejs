@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 48px;
+            font-family: Gotham, Tahoma, sans-serif;
+            text-align: center;
+            color: brown;
+            font-style: italic;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Application</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../include/mongodb.ico" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <main id="site-main">
+        <div class="container">
+            <div class="box-nav d-flex justify-between">
+                <div class="filter">
+                    <a href="/"><i class="fas fa-angle-double-left"></i> All Employees</a>
+                </div>
+            </div>
+            <h1 class="title">Search Here</h1><br /><br /><br />
+            <!-- <br/><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Recherche.." class="type-1"><br/> -->
+            <!-- <br/><input type="text" id="myInput" onkeyup="filtrer()" placeholder="Search.." class="type-1"><br/> -->
+            <table class="display" style="width:100%" id="example">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;">_id</th>
+                        <th style="text-align:center;">Nom</th>
+                        <th style="text-align:center;">Prénom</th>
+                        <th style="text-align:center;">Anciennete</th>
+                        <th style="text-align:center;">Adresse</th>
+                        <th style="text-align:center;">Téléphone</th>
+                        <th style="text-align:center;">Prime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% employes.forEach(employes=>{ %>
+                        <tr>
+                            <td>
+                                <%= employes._id %>
+                            </td>
+                            <td style="text-align:center;">
+                                <%= employes.nom %>
+                            </td>
+                            <td style="text-align:center;">
+                                <%= employes.prenom %>
+                            </td>
+                            <td style="text-align:center;">
+                                <%= employes.anciennete %>
+                            </td>
+                            <td style="text-align:center;">numero: <%= employes.adresse.numero %> <br /> code postale:
+                                    <%= employes.adresse.codepostal %> <br /> ville: <%= employes.adresse.ville %>
+                            </td>
+                            <td style="text-align:center;">
+                                <%= employes.tel %>
+                            </td>
+                            <td style="text-align:center;">
+                                <%= employes.prime %>
+                            </td>
+                        </tr>
+                        <%})%>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>_id</th>
+                        <th>Nom</th>
+                        <th>Prenom</th>
+                        <th>Anciennete</th>
+                        <th>Adresse</th>
+                        <th>Telephone</th>
+                        <th>Prime</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </main>
+
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            $('#example tfoot th').each(function () {
+                var title = $(this).text();
+                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+            });
+
+            // DataTable
+            var table = $('#example').DataTable({
+                initComplete: function () {
+                    // Apply the search
+                    this.api()
+                        .columns()
+                        .every(function () {
+                            var that = this;
+                            $('input', this.footer()).on('keyup change clear', function () {
+                                if (that.search() !== this.value) {
+                                    that.search(this.value).draw();
+                                }
+                            });
+                        });
+                },
+            });
+        });
+
+
+
+
+        /** $(document).ready(function(){
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        }); **/
+
+        /** function filtrer() {
+          var filtre, tableau, ligne, cellule, i, texte;
+          filtre = document.getElementById('myInput').value.topUpperCase();
+          tableau = document.getElementById('myTable');
+          ligne = tableau.getElementsByTagName('tr');
+          for (i = 0; i < ligne.length; i++) {
+            cellule = ligne[i].getElementsByTagName('td')[0];
+            if (cellule) {
+              texte = cellule.innerText;
+              if (texte.to + UpperCase().indexOf(filtre) > -1) {
+                ligne[i].style.display = '';
+              } else {
+                ligne[i].style.display = 'none';
+              }
+            }
+          }
+        }**/
+    </script>
+</body>
+
+</html>

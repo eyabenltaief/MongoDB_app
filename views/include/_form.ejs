@@ -1,0 +1,44 @@
+<!-- form handling -->
+<form action='/api/users' method="POST" id="add_user">
+    <div class="new-user">
+
+        <div class="form-group">
+            <label for="nom" class="text-light">FirstName</label>
+            <input type="text" name="nom">
+        </div>
+        <div class="form-group">
+            <label for="prenom" class="text-light">LastName</label>
+            <input type="text" name="prenom">
+        </div>
+        <div class="form-group">
+            <label for="anciennete" class="text-light">Anciennete</label>
+            <input type="text" name="anciennete">
+        </div>
+        <div class="form-group">
+            <label for="tel" class="text-light">Telephone</label>
+            <input type="text" name="tel">
+        </div>
+        <div class="form-group">
+            <label for="prime" class="text-light">Prime</label>
+            <input type="text" name="prime">
+        </div><br /><br />
+        <h3>Adresse</h3>
+        <div class="form-group">
+            <label for="numero" class="text-light">Street number</label>
+            <input type="text" name="numero">
+        </div>
+        <div class="form-group">
+            <label for="ville" class="text-light">Ville</label>
+            <input type="text" name="ville">
+        </div>
+        <div class="form-group">
+            <label for="codepostale" class="text-light">Postal code</label>
+            <input type="text" name="codepostale">
+        </div><br /><br />
+
+        <div class="form-group">
+            <button type="submit" class="btn text-dark update">Save</button>
+        </div>
+    </div>
+</form>
+<!-- /form handling -->
